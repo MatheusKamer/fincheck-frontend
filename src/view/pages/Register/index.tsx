@@ -28,7 +28,7 @@ export function Register() {
         onSubmit={handleSubmit}
         className="mt-[60px] flex flex-col gap-4"
       >
-      <Input
+        <Input
           type="text"
           placeholder="Nome"
           error={errors.name?.message}
