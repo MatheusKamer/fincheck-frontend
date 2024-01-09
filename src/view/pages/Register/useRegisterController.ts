@@ -5,6 +5,7 @@ import { useMutation } from '@tanstack/react-query'
 import { zodResolver } from '@hookform/resolvers/zod';
 import { authService } from '../../../app/services/authService';
 import { SignupParams } from '../../../app/services/authService/signup';
+import { useAuth } from '../../../app/hooks/useAuth';
 
 const schema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -29,9 +30,13 @@ export function useRegisterController() {
     },
   })
 
+  const { signin } = useAuth();
+
   const handleSubmit = hookFormHandleSubmit(async (data) => {
     try {
-      await mutateAsync(data)
+      const { accessToken } = await mutateAsync(data)
+
+      signin(accessToken);
     } catch {
       toast.error('This e-mail is already in use')
     }
