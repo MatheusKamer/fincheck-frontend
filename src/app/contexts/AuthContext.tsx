@@ -51,10 +51,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [isError, signout]);
 
-  if (isFetching) {
-    return <LaunchScreen />
-  }
-
   return (
     <AuthContext.Provider
       value={{
@@ -63,7 +59,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signout,
       }}
     >
-      {children}
+      <LaunchScreen isLoading={isFetching}/>
+
+      {!isFetching && children}
     </AuthContext.Provider>
   );
 }
