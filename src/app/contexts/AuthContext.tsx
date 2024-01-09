@@ -1,11 +1,14 @@
 import {
   createContext,
   useCallback,
+  useEffect,
   useState
 } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { usersService } from '../services/usersService';
 import { localStorageKeys } from '../config/localStorageKeys';
+import toast from 'react-hot-toast';
+import { PageLoader } from '../../view/components/PageLoader';
 
 interface AuthContextValue {
   signedIn: boolean;
@@ -22,9 +25,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return !!storegAccessToken; /* Utilizando !! para transformar em boolean */
   });
 
-  useQuery({
+  const { isError, data, isFetching } = useQuery({
     queryKey: ['users', 'me'],
     queryFn: () => usersService.me(),
+    enabled: signedIn,
+    staleTime: Infinity,
   });
 
   const signin = useCallback((accessToken: string) => {
@@ -37,9 +42,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setSignedIn(false);
   }, []);
 
+  useEffect(() => {
+    if (isError) {
+      toast.error('Your session has expired, you need to sign in again.')
+      signout()
+    }
+  }, [isError, signout]);
+
+  if (isFetching) {
+    return <PageLoader />
+  }
+
   return (
     <AuthContext.Provider value={{ signedIn, signin, signout }}>
+      <h1>{data?.email}</h1>
       {children}
     </AuthContext.Provider>
-  )
+  );
 }
