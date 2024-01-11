@@ -1,4 +1,8 @@
-import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
+import { AccountCard } from "./AccountCard";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon
+} from "@radix-ui/react-icons";
 import { EyeIcon } from "../../../components/icons/EyeIcon";
 
 export function Accounts() {
@@ -22,9 +26,9 @@ export function Accounts() {
 
       <div className="flex-1 flex flex-col justify-end">
         <div className="flex items-center justify-between">
-          <strong className="text-white tracking-[-1px] text-lg">
+          <span className="text-white tracking-[-0.5px] text-lg">
             Minhas contas
-          </strong>
+          </span>
 
           <div>
             <button className="p-3 rounded-full enabled:hover:bg-black/10 transition-colors disabled:opacity-40">
@@ -35,7 +39,13 @@ export function Accounts() {
             </button>
           </div>
         </div>
-        <div>Contas</div>
+        <div className="mt-4">
+          <AccountCard
+            color="#7950F2"
+            name="Nubank"
+            balance={1000}
+          />
+        </div>
       </div>
     </div>
   )
