@@ -1,3 +1,4 @@
+import { ExitIcon } from '@radix-ui/react-icons'
 import { DropdownMenu } from './DropdownMenu'
 
 export function UserMenu(){
@@ -11,9 +12,10 @@ export function UserMenu(){
         </div>
       </DropdownMenu.Trigger>
 
-        <DropdownMenu.Content>
-          <DropdownMenu.Item>
+        <DropdownMenu.Content className="w-32">
+          <DropdownMenu.Item className="flex items-center justify-between">
             Sair
+            <ExitIcon className="w-4 h-4"/>
           </DropdownMenu.Item>
         </DropdownMenu.Content>
     </DropdownMenu.Root>
