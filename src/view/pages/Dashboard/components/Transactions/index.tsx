@@ -10,9 +10,18 @@ import { FilterIcon } from "../../../../components/icons/FilterIcon";
 import { CategoryIcon } from "../../../../components/icons/categories/CategoryIcon";
 import { formatCurrency } from "../../../../../app/utils/formatCurrency";
 import emptyStateImagem from "../../../../../assets/images/empty-state.svg"
+import { FiltersModal } from "./FiltersModal";
 
 export function Transactions() {
-  const { areValuesVisible, transactions, isLoading, isInitialLoading } = useTransactionsController()
+  const {
+    areValuesVisible,
+    transactions,
+    isLoading,
+    isInitialLoading,
+    handleCloseFiltersModal,
+    handleOpenFiltersModal,
+    isFiltersModalOpen
+  } = useTransactionsController()
 
   const hasTransactions = transactions.length > 0;
 
@@ -26,11 +35,16 @@ export function Transactions() {
 
       {!isInitialLoading &&
         <>
+          <FiltersModal
+            open={isFiltersModalOpen}
+            onClose={handleCloseFiltersModal}
+          />
+
           <header>
             <div className="flex items-center justify-between">
               <TransactionTypeDropdown />
 
-              <button>
+              <button onClick={handleOpenFiltersModal}>
                 <FilterIcon />
               </button>
             </div>
