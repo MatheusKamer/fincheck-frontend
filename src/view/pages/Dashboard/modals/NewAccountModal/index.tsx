@@ -3,6 +3,7 @@ import { Modal } from "../../../../components/Modal";
 import { InputCurrency } from "../../../../components/InputCurrency";
 import { Input } from "../../../../components/Input";
 import { Select } from "../../../../components/Select";
+import { ColorsDropdownInput } from "../../../../components/ColorsDropdownInput";
 
 /**
  * @author Matheus Kamer
@@ -51,6 +52,8 @@ export function NewAccountModal() {
               },
             ]}
           />
+
+          <ColorsDropdownInput />
         </div>
       </form>
     </Modal>
