@@ -1,19 +1,19 @@
-import { useNewAccountModalController } from "./useNewAccountModalController";
+import { useNewTransactionModalController } from "./useNewAccountModalController";
 import { Modal } from "../../../../components/Modal";
 import { Input } from "../../../../components/Input";
-import { Select } from "../../../../components/Select";
 import { Button } from "../../../../components/Button";
+import { Select } from "../../../../components/Select";
 import { InputCurrency } from "../../../../components/InputCurrency";
 import { ColorsDropdownInput } from "../../../../components/ColorsDropdownInput";
 
-export function NewAccountModal() {
-  const { closeNewAccountModal, isNewAccountModalOpen } = useNewAccountModalController()
+export function NewTransactionModal() {
+  const { closeNewTransactionModal, isNewTransactionModalOpen } = useNewTransactionModalController()
 
   return (
     <Modal
       title="Nova Conta"
-      open={isNewAccountModalOpen}
-      onClose={closeNewAccountModal}
+      open={isNewTransactionModalOpen}
+      onClose={closeNewTransactionModal}
     >
       <form>
         <div>

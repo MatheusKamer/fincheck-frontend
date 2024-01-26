@@ -1,10 +1,11 @@
 import { Fab } from "./components/Fab";
-import { Logo } from "../../components/Logo";
 import { Accounts } from "./components/Accounts";
-import { UserMenu } from "../../components/UserMenu";
 import { Transactions } from "./components/Transactions";
-import { DashboardProvider } from "./components/DashboardContext";
 import { NewAccountModal } from "./modals/NewAccountModal";
+import { DashboardProvider } from "./components/DashboardContext";
+import { NewTransactionModal } from "./modals/NewTransactionModal";
+import { Logo } from "../../components/Logo";
+import { UserMenu } from "../../components/UserMenu";
 
 export function Dashboard() {
   return (
@@ -26,6 +27,7 @@ export function Dashboard() {
 
         <Fab />
         <NewAccountModal />
+        <NewTransactionModal />
       </div>
     </DashboardProvider>
   )
