@@ -1,7 +1,9 @@
-import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
+import { Popover } from "./Popover";
 import { cn } from "../../app/utils/cn";
 import { formatDate } from "../../app/utils/formatDate";
+import { DatePicker } from "./DatePicker";
 
 interface DatePickerInputProps {
   error?: string;
@@ -13,28 +15,36 @@ export function DatePickerInput({ error, className }: DatePickerInputProps) {
 
   return (
     <div>
-      <button
-        type="button"
-        className={cn(
-          "bg-white w-full rounded-lg border border-gray-500 px-3 h-[52px] text-gray-700 focus:border-teal-900 outline-none transition-all text-left relative pt-4",
-          error && '!border-red-900',
-          className
-        )}
-      >
-        <span className="text-gray-700 text-xs left-[13px] top-2 pointer-events-none absolute">
-          Data
-        </span>
-        <span>{formatDate(selectedDate)}</span>
-      </button>
+      <Popover.Root>
+        <Popover.Trigger>
+          <button
+            type="button"
+            className={cn(
+              "bg-white w-full rounded-lg border border-gray-500 px-3 h-[52px] text-gray-700 focus:border-teal-900 outline-none transition-all text-left relative pt-4",
+              error && '!border-red-900',
+              className
+            )}
+          >
+            <span className="text-gray-700 text-xs left-[13px] top-2 pointer-events-none absolute">
+              Data
+            </span>
+            <span>{formatDate(selectedDate)}</span>
+          </button>
+        </Popover.Trigger>
 
-      {error && (
-        <div className="flex gap-2 items-center mt-2 text-red-900">
-          <CrossCircledIcon />
-          <span className="text-xs">
-            {error}
-          </span>
-        </div>
-      )}
+        <Popover.Content>
+          <DatePicker value={selectedDate} onChange={date => setSelectedDate(date)}/>
+        </Popover.Content>
+
+        {error && (
+          <div className="flex gap-2 items-center mt-2 text-red-900">
+            <CrossCircledIcon />
+            <span className="text-xs">
+              {error}
+            </span>
+          </div>
+        )}
+      </Popover.Root>
     </div>
   )
 }
