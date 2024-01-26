@@ -1,6 +1,7 @@
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { cn } from "../../app/utils/cn";
+import { formatDate } from "../../app/utils/formatDate";
 
 interface DatePickerInputProps {
   error?: string;
@@ -23,7 +24,7 @@ export function DatePickerInput({ error, className }: DatePickerInputProps) {
         <span className="text-gray-700 text-xs left-[13px] top-2 pointer-events-none absolute">
           Data
         </span>
-        <span>{selectedDate.toISOString()}</span>
+        <span>{formatDate(selectedDate)}</span>
       </button>
 
       {error && (
