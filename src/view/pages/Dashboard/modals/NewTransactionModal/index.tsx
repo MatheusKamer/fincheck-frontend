@@ -4,20 +4,28 @@ import { Input } from "../../../../components/Input";
 import { Button } from "../../../../components/Button";
 import { Select } from "../../../../components/Select";
 import { InputCurrency } from "../../../../components/InputCurrency";
-import { ColorsDropdownInput } from "../../../../components/ColorsDropdownInput";
+import { DatePickerInput } from "../../../../components/DatePickerInput";
 
 export function NewTransactionModal() {
-  const { closeNewTransactionModal, isNewTransactionModalOpen } = useNewTransactionModalController()
+  const {
+    closeNewTransactionModal,
+    isNewTransactionModalOpen,
+    newTransactionType
+  } = useNewTransactionModalController()
+
+  const isExpense = newTransactionType === 'EXPENSE';
 
   return (
     <Modal
-      title="Nova Conta"
+      title={isExpense ? 'Nova Despensa' : 'Nova Receita'}
       open={isNewTransactionModalOpen}
       onClose={closeNewTransactionModal}
     >
       <form>
         <div>
-          <span className="text-gray-600 tracking-[-0.5px] text-xs">Saldo</span>
+          <span className="text-gray-600 tracking-[-0.5px] text-xs">
+            Valor {isExpense ? 'da despesa' : 'da receita'}
+          </span>
 
           <div className="flex items-center gap-2">
             <span className="text-gray-600 tracking-[-0.5px]">R$</span>
@@ -29,11 +37,11 @@ export function NewTransactionModal() {
           <Input
             type="text"
             name="name"
-            placeholder="Nome da conta"
+            placeholder={isExpense ? 'Nome da Despesa' : 'Nome da Receita'}
           />
 
           <Select
-            placeholder="Tipo"
+            placeholder="Categoria"
             options={[
               {
                 value: "CHECKING",
@@ -50,7 +58,25 @@ export function NewTransactionModal() {
             ]}
           />
 
-          <ColorsDropdownInput />
+          <Select
+            placeholder={isExpense ? 'Pagar com' : 'Receber com'}
+            options={[
+              {
+                value: "CHECKING",
+                label: "Conta Corrente"
+              },
+              {
+                value: "INVESTMENT",
+                label: "Investimento"
+              },
+              {
+                value: "CASH",
+                label: "Dinheiro Físico"
+              },
+            ]}
+          />
+
+          <DatePickerInput />
         </div>
 
         <Button type="submit" className="w-full mt-6">
