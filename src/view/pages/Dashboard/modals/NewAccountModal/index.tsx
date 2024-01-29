@@ -7,7 +7,13 @@ import { InputCurrency } from "../../../../components/InputCurrency";
 import { ColorsDropdownInput } from "../../../../components/ColorsDropdownInput";
 
 export function NewAccountModal() {
-  const { closeNewAccountModal, isNewAccountModalOpen } = useNewAccountModalController()
+  const {
+    closeNewAccountModal,
+    isNewAccountModalOpen,
+    register,
+    errors,
+    handleSubmit
+  } = useNewAccountModalController()
 
   return (
     <Modal
@@ -15,25 +21,31 @@ export function NewAccountModal() {
       open={isNewAccountModalOpen}
       onClose={closeNewAccountModal}
     >
-      <form>
+      <form onSubmit={handleSubmit}>
         <div>
-          <span className="text-gray-600 tracking-[-0.5px] text-xs">Saldo</span>
+          <span className="text-gray-600 tracking-[-0.5px] text-xs">Saldo inicial</span>
 
           <div className="flex items-center gap-2">
             <span className="text-gray-600 tracking-[-0.5px]">R$</span>
-            <InputCurrency />
+            <InputCurrency
+              error={errors.initialBalance?.message}
+              {...register('initialBalance')}
+            />
           </div>
         </div>
 
         <div className="mt-10 flex flex-col gap-4">
           <Input
             type="text"
-            name="name"
             placeholder="Nome da conta"
+            error={errors.name?.message}
+            {...register('name')}
           />
 
           <Select
             placeholder="Tipo"
+            error={errors.type?.message}
+            {...register('type')}
             options={[
               {
                 value: "CHECKING",
@@ -50,7 +62,10 @@ export function NewAccountModal() {
             ]}
           />
 
-          <ColorsDropdownInput />
+          <ColorsDropdownInput
+            error={errors.color?.message}
+            {...register('color')}
+          />
         </div>
 
         <Button type="submit" className="w-full mt-6">
