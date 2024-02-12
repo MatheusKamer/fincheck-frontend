@@ -1,18 +1,21 @@
 import { CrossCircledIcon } from '@radix-ui/react-icons';
-import { NumericFormat } from 'react-number-format';
+import { NumericFormat,  } from 'react-number-format';
 import { cn } from '../../app/utils/cn';
 
 interface InputCurrencyProps{
   error?: string;
+  value?: string | number;
+  onChange?(value: string): void;
 }
 
-export function InputCurrency({ error }: InputCurrencyProps) {
+export function InputCurrency({ error, value, onChange }: InputCurrencyProps) {
   return (
     <div>
       <NumericFormat
-        thousandSeparator="."
+        thousandSeparator=""
         decimalSeparator=","
-        defaultValue="0"
+        value={value}
+        onChange={event => onChange?.(event.target.value)}
         className={cn(
           "w-full text-gray-800 text-[32px] font-bold tracking-[-0.5px] outline-none",
           error && "text-red-900"
