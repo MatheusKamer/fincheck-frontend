@@ -22,6 +22,7 @@ export function Accounts() {
     isLoading,
     accounts,
     openNewAccountModal,
+    currentBalance,
   } = useAccountsController();
 
   return (
@@ -44,7 +45,7 @@ export function Accounts() {
               "text-2xl tracking-[-0.5px] text-white",
               !areValuesVisible && "blur-md"
             )}>
-              {formatCurrency(1000)}
+              {formatCurrency(currentBalance)}
             </strong>
 
             <button
@@ -104,41 +105,18 @@ export function Accounts() {
                   />
                 </div>
 
-                <SwiperSlide>
-                  <AccountCard
-                    color="#7950F2"
-                    name="Nubank"
-                    balance={1000}
-                    type="CASH"
-                  />
-                </SwiperSlide>
-
-                <SwiperSlide>
-                  <AccountCard
-                    color="#0f0"
-                    name="Sicredi"
-                    balance={2000}
-                    type="CHECKING"
-                  />
-                </SwiperSlide>
-
-                <SwiperSlide>
-                  <AccountCard
-                    color="#333"
-                    name="XP"
-                    balance={3000}
-                    type="INVESTMENT"
-                  />
-                </SwiperSlide>
-
-                <SwiperSlide>
-                  <AccountCard
-                    color="#333"
-                    name="XP"
-                    balance={3000}
-                    type="INVESTMENT"
-                  />
-                </SwiperSlide>
+                {accounts.map(account => (
+                  <SwiperSlide
+                    key={account.id}
+                  >
+                    <AccountCard
+                      color={account.color}
+                      name={account.name}
+                      balance={account.currentBalance}
+                      type={account.type}
+                    />
+                  </SwiperSlide>
+                ))}
               </Swiper>
             </div>
           }
