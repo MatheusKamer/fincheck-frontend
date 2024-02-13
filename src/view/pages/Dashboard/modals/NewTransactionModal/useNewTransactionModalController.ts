@@ -5,6 +5,10 @@ import { useDashboard } from "../../components/DashboardContext/useDashboard";
 import { useBankAccounts } from "../../../../../app/hooks/useBankAccounts";
 import { useCategories } from "../../../../../app/hooks/useCategories";
 import { useMemo } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { transactionsService } from "../../../../../app/services/transactionsService";
+import toast from "react-hot-toast";
+import { currencyStringToNumber } from "../../../../../app/utils/currencyStringToNumber";
 
 const schema = z.object({
   name: z.string().min(1, 'Informe o nome'),
@@ -28,17 +32,46 @@ export function useNewTransactionModalController() {
     handleSubmit: hookFormHandleSubmit,
     formState: { errors },
     control,
-    // reset,
+    reset,
   } = useForm<FormData>({
     resolver: zodResolver(schema)
   });
 
-  const handleSubmit = hookFormHandleSubmit(data => {
-    console.log(data);
-  });
-
+  const queryClient = useQueryClient();
   const { accounts } = useBankAccounts();
   const { categories: categoriesList } = useCategories();
+  const { isLoading, mutateAsync } = useMutation(transactionsService.create);
+
+  const handleSubmit = hookFormHandleSubmit( async data => {
+    try {
+      await mutateAsync({
+        ...data,
+        value: currencyStringToNumber(data.value),
+        type: newTransactionType!,
+        date: data.date.toISOString(),
+      });
+
+      queryClient.invalidateQueries({ queryKey: ['transaction']})
+      toast.success(
+        newTransactionType === 'EXPENSE'
+        ? 'Despesa cadastrada com sucesso!'
+        : 'Receita cadastrada com sucesso!'
+      );
+      closeNewTransactionModal();
+      reset({
+        value: "0",
+        categoryId: "",
+        bankAccountId: "",
+        name: "",
+      });
+    } catch {
+      toast.error(
+        newTransactionType === 'EXPENSE'
+        ? 'Erro ao cadastrar despesa!'
+        : 'Erro ao cadastrar receita!'
+      );
+    }
+  });
 
   const categories = useMemo(() => {
     return categoriesList.filter(category => category.type === newTransactionType)
@@ -53,6 +86,7 @@ export function useNewTransactionModalController() {
     control,
     handleSubmit,
     accounts,
-    categories
+    categories,
+    isLoading
   }
 }
