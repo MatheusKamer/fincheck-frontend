@@ -6,9 +6,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { bankAccontsService } from "../../../../../app/services/bankAccountsService";
 import { currencyStringToNumber } from "../../../../../app/utils/currencyStringToNumber";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
 const schema = z.object({
-  initialBalance: z.string().min(1, 'Saldo inicial é obrigatório'),
+  initialBalance: z.union([
+    z.string().min(1, 'Saldo inicial é obrigatório'),
+    z.number(),
+  ]),
   name: z.string().min(1, 'Nome da conta é obrigatório'),
   type: z.enum(['CHECKING', 'INVESTMENT', 'CASH']),
   color: z.string().min(1, 'Cor é obrigatória'),
@@ -20,6 +24,7 @@ export function useEditAccountModalController() {
   const {
     isEditAccountModalOpen,
     closeEditAccountModal,
+    accountBeingEdited,
   } = useDashboard();
 
   const {
@@ -27,34 +32,48 @@ export function useEditAccountModalController() {
     handleSubmit: hookFormHandleSubmit,
     formState: { errors },
     control,
-    reset,
   } = useForm<FormData>({
-    resolver: zodResolver(schema)
+    resolver: zodResolver(schema),
+    defaultValues: {
+      color: accountBeingEdited?.color,
+      name: accountBeingEdited?.name,
+      type: accountBeingEdited?.type,
+      initialBalance: accountBeingEdited?.initialBalance,
+    }
   });
 
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(true)
+
   const queryClient = useQueryClient();
-  const { isLoading, mutateAsync } = useMutation(bankAccontsService.create)
+  const { isLoading, mutateAsync } = useMutation(bankAccontsService.update)
 
   const handleSubmit = hookFormHandleSubmit(async (data) => {
     try {
       await mutateAsync({
         ...data,
         initialBalance: currencyStringToNumber(data.initialBalance),
+        id: accountBeingEdited!.id,
       });
 
       queryClient.invalidateQueries({ queryKey: ['bankAccounts']})
-      toast.success('Conta cadastrada com sucesso!');
+      toast.success('Conta atualizada com sucesso!');
       closeEditAccountModal();
-      reset({
-        type: "CHECKING",
-        name: "",
-        color: "",
-        initialBalance: "0",
-      });
     } catch {
-      toast.error('Erro ao cadastrar a conta!');
+      toast.error('Erro ao atualizar a conta!');
     }
   })
+
+  function handleOpenDeleteModal() {
+    setIsDeleteModalOpen(true)
+  }
+
+  function handleCloseDeleteModal() {
+    setIsDeleteModalOpen(false)
+  }
+
+  function handleDeleteAccount() {
+
+  }
 
   return {
     isEditAccountModalOpen,
@@ -63,6 +82,10 @@ export function useEditAccountModalController() {
     errors,
     handleSubmit,
     control,
-    isLoading
+    isLoading,
+    isDeleteModalOpen,
+    handleOpenDeleteModal,
+    handleCloseDeleteModal,
+    handleDeleteAccount
   }
 }
