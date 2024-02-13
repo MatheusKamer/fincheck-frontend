@@ -1,12 +1,12 @@
 import { z } from "zod";
-import { useDashboard } from "../../components/DashboardContext/useDashboard";
+import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useDashboard } from "../../components/DashboardContext/useDashboard";
 import { bankAccontsService } from "../../../../../app/services/bankAccountsService";
 import { currencyStringToNumber } from "../../../../../app/utils/currencyStringToNumber";
-import toast from "react-hot-toast";
-import { useState } from "react";
 
 const schema = z.object({
   initialBalance: z.union([
@@ -42,14 +42,22 @@ export function useEditAccountModalController() {
     }
   });
 
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(true)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   const queryClient = useQueryClient();
-  const { isLoading, mutateAsync } = useMutation(bankAccontsService.update)
+  const {
+    isLoading,
+    mutateAsync: updateAccount,
+  } = useMutation(bankAccontsService.update);
+
+  const {
+    isLoading: isLoadingDelete,
+    mutateAsync: removeAccount,
+  } = useMutation(bankAccontsService.remove);
 
   const handleSubmit = hookFormHandleSubmit(async (data) => {
     try {
-      await mutateAsync({
+      await updateAccount({
         ...data,
         initialBalance: currencyStringToNumber(data.initialBalance),
         id: accountBeingEdited!.id,
@@ -71,8 +79,16 @@ export function useEditAccountModalController() {
     setIsDeleteModalOpen(false)
   }
 
-  function handleDeleteAccount() {
+  async function handleDeleteAccount() {
+    try {
+      await removeAccount(accountBeingEdited!.id);
 
+      queryClient.invalidateQueries({ queryKey: ['bankAccounts']})
+      toast.success('Conta excluída com sucesso!');
+      closeEditAccountModal();
+    } catch {
+      toast.error('Erro ao excluir a conta!');
+    }
   }
 
   return {
@@ -86,6 +102,7 @@ export function useEditAccountModalController() {
     isDeleteModalOpen,
     handleOpenDeleteModal,
     handleCloseDeleteModal,
-    handleDeleteAccount
+    handleDeleteAccount,
+    isLoadingDelete
   }
 }
