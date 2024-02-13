@@ -109,12 +109,7 @@ export function Accounts() {
                   <SwiperSlide
                     key={account.id}
                   >
-                    <AccountCard
-                      color={account.color}
-                      name={account.name}
-                      balance={account.currentBalance}
-                      type={account.type}
-                    />
+                    <AccountCard data={account} />
                   </SwiperSlide>
                 ))}
               </Swiper>
