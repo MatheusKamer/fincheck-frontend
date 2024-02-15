@@ -51,7 +51,7 @@ export function useNewTransactionModalController() {
         date: data.date.toISOString(),
       });
 
-      queryClient.invalidateQueries({ queryKey: ['transaction']})
+      queryClient.invalidateQueries({ queryKey: ['transactions']})
       toast.success(
         newTransactionType === 'EXPENSE'
         ? 'Despesa cadastrada com sucesso!'
