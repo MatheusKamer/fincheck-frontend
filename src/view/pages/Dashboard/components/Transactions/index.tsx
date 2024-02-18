@@ -56,8 +56,10 @@ export function Transactions() {
               <Swiper
                 slidesPerView={3}
                 centeredSlides
-                initialSlide={filters.month}
+                initialSlide={filters.month
+                }
                 onSlideChange={swiper => {
+                  if (swiper.realIndex === filters.month) return;
                   handleChangeMonth(swiper.realIndex)
                 }}
               >
