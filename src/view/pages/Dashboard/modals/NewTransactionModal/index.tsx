@@ -25,7 +25,7 @@ export function NewTransactionModal() {
 
   return (
     <Modal
-      title={isExpense ? 'Nova Despensa' : 'Nova Receita'}
+      title={isExpense ? 'Nova Despesa' : 'Nova Receita'}
       open={isNewTransactionModalOpen}
       onClose={closeNewTransactionModal}
     >
