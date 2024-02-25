@@ -39,9 +39,9 @@ export function Modal({ open, children, title, rightAction, onClose }: ModalProp
               {title}
             </span>
 
-            <div className="w-12 h-12 flex items-center justify-center outline-none">
+            <span className="w-12 h-12 flex items-center justify-center outline-none">
               {rightAction}
-            </div>
+            </span>
           </header>
 
           <div>
