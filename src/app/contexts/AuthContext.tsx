@@ -31,7 +31,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     queryKey: ['users', 'me'],
     queryFn: () => usersService.me(),
     enabled: signedIn,
-    staleTime: Infinity,
+    staleTime: 600000,
   });
 
   const signin = useCallback((accessToken: string) => {
