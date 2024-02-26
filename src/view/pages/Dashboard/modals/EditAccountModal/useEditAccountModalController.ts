@@ -63,6 +63,7 @@ export function useEditAccountModalController() {
         id: accountBeingEdited!.id,
       });
 
+      queryClient.invalidateQueries({ queryKey: ['transactions']})
       queryClient.invalidateQueries({ queryKey: ['bankAccounts']})
       toast.success('Conta atualizada com sucesso!');
       closeEditAccountModal();
@@ -83,6 +84,7 @@ export function useEditAccountModalController() {
     try {
       await removeAccount(accountBeingEdited!.id);
 
+      queryClient.invalidateQueries({ queryKey: ['transactions']})
       queryClient.invalidateQueries({ queryKey: ['bankAccounts']})
       toast.success('Conta excluída com sucesso!');
       closeEditAccountModal();
