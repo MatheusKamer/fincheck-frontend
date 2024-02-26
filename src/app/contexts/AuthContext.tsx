@@ -4,14 +4,16 @@ import {
   useEffect,
   useState
 } from 'react';
+import toast from 'react-hot-toast';
 import { useQuery } from '@tanstack/react-query';
+import { User } from '../entities/User';
 import { usersService } from '../services/usersService';
 import { localStorageKeys } from '../config/localStorageKeys';
-import toast from 'react-hot-toast';
 import { LaunchScreen } from '../../view/components/LaunchScreen';
 
 interface AuthContextValue {
   signedIn: boolean;
+  user: User | undefined;
   signin(accessToken: string): void;
   signout(): void;
 }
@@ -25,7 +27,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return !!storegAccessToken; /* Utilizando !! para transformar em boolean */
   });
 
-  const { isError, isSuccess, isFetching, remove } = useQuery({
+  const { isError, isSuccess, isFetching, remove, data } = useQuery({
     queryKey: ['users', 'me'],
     queryFn: () => usersService.me(),
     enabled: signedIn,
@@ -55,6 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     <AuthContext.Provider
       value={{
         signedIn: isSuccess && signedIn,
+        user: data,
         signin,
         signout,
       }}
