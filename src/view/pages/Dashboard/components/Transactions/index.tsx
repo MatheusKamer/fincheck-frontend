@@ -4,6 +4,7 @@ import { TransactionTypeDropdown } from "./TransactionTypeDropdown";
 import { useTransactionsController } from "./useTransactionsController";
 import { TransactionsSliderNavigation } from "./TransactionsSliderNavigation";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { EditTransactionModal } from "../../modals/EditTransactionModal";
 import { cn } from "../../../../../app/utils/cn";
 import { MONTHS } from "../../../../../app/config/constants";
 import { Spinner } from "../../../../components/Spinner";
@@ -12,7 +13,6 @@ import { CategoryIcon } from "../../../../components/icons/categories/CategoryIc
 import { formatDate } from "../../../../../app/utils/formatDate";
 import emptyStateImagem from "../../../../../assets/images/empty-state.svg"
 import { formatCurrency } from "../../../../../app/utils/formatCurrency";
-import { EditTransactionModal } from "../../modals/EditTransactionModal copy";
 
 export function Transactions() {
   const {
